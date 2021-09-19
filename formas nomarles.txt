@@ -1,0 +1,22 @@
+1fn
+Se requiere que los valores sean atómicos con respecto al DBMS en los dominios en los que cada relación es definida
+
+2fn
+Ninguno de sus atributos no-principales son funcionalmente dependientes en una parte (subconjunto propio) de una clave primaria (Un atributo no-principal es uno que no pertenece a ninguna clave primaria).
+
+3fn
+Asegurarse de que los atributos no-clave son dependientes en las claves
+
+3.5fn
+Cada dependencia funcional no trivial tiene una clave candidata como determinante
+
+4fn
+Dependencia multivaluada. Una tabla con una dependencia multivaluada es una donde la existencia de dos o más relaciones independientes muchos a muchos causa redundancia; y es esta redundancia la que es suprimida por la cuarta forma normal.
+
+5fn
+Cada dependencia de unión (join) en ella es implicada por las claves candidatas.
+
+5.5fn
+Requiere que la base de datos contenga restricciones de dominios y de claves.
+
+Una restricción del dominio especifica los valores permitidos para un atributo dado, mientras que una restricción clave especifica los atributos que identifican únicamente una fila en una tabla dada.

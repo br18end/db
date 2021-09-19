@@ -1,0 +1,51 @@
+1.Presenta listado de alumnos por carrera, semestre, en ordenado ascendente por apellido y descendente por carrera.
+
+select alumnos.* from alumnos inner join carreras using(idCarrera) group by idCarrera order by idCarrera desc, apellidos asc;
+
+2) Presente el número de exámenes aplicados a cada uno de los grupos. (Grupo, Materia, Número de Exámenes).
+
+Select group, count(IdExamen) from grupos inner join tiposExamen on idGrupo=noGrupo inner join materias using(claveMateria) group by noGrupo;
+
+3) Presenta Grupo, Descripción de la Materia, Periodo, Salón y Hora de clases
+
+select grupo, descripcion, periodo, salón, hora from grupo inner join materias using(claveMateria);
+
+4) Presenta un listado de alumnos por grupo y Materia (Grupo, Descripción de la Materia, Número de Control, Nombre Completo.
+
+select alumnos.* from alumnos inner join alumnogrupo using(noControl) inner join grupo using(noGrupo) inner join materias using(claveMateria) group by noGrupo, claveMateria;
+
+5) Presenta Número de control, Nombre Completo los alumnos y su Promedio de calificaciones obtenidas en los diferentes exámenes.
+
+select noControl, nombre, apellidos, avg(calificacion) from alumnos inner join exámenes using(noControl);
+
+6) Presenta el Promedio general de cada uno de los diferentes grupos (Grupo, Materia y Promedio general)
+
+select grupo, materias.descripcion, avg(calificacion) as promedio from grupos inner join materias using(claveMateria) inner join tipoExamen on idGrupo=noGrupo inner join exámenes using(idExamen) group by noGrupo;
+
+7) Presenta el número de alumnos asignados a cada uno de los diferentes Proyectos. (Nombre de Sistema, Numero de Alumnos)
+
+select nombreSistema, count(noControl) from proyectos inner join solicitudes using(noProyecto) group by noProyecto;
+
+8) Presenta a todos los alumnos que están en un proyecto que le pertenece a SONY de Mexicali.
+
+select alumnos.* from proyecto inner join solicitudes using(noProyecto) inner join alumnos using(noControl) where empresa like "sony";
+
+9) Que alumnos están inscritos en la materia de "Taller de Base de Datos" y además se les imparte clases en U07 a las 9:00.
+
+select alumnos.* from alumnos inner join alumnGrupo using(noControl) inner join grupos using(noGrupo) inner join materias using(claveMateria) where materia.descripcion like "Taller de Base de Datos" and salón like "U07" and hour(hora)=9;
+
+10.Que carrera tiene más alumnos inscritos.
+
+select carrera from carreras inner join alumnos using(idCarrera) where count(idCarrera) >=all(select count(idCarrera) from carreras inner join alumnos using(idCarrera)) limit 1;
+
+11.Presenta el temario de la materia de Fundamentos Base de Datos I
+
+select unidadesMateria.* from unidadesMateria inner join materias using(claveMateria) where descripción like "Base de Datos I";
+
+12.Elimina a todos los alumnos de la carrera de Sistemas
+
+delete from alumnos where carrera like "sistemas";
+
+13.Inserta un nuevo alumno en la carrera de Ingeniería en sistemas
+
+Insert into alumnos values("12490431", "Armando", "Perez", "001");

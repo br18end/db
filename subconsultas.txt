@@ -1,0 +1,59 @@
+1. Presenta todos los productos cuyo precio por unidad es mayor que cualquier producto vendido con un descuento del 25 por ciento o mayor:
+
+select * from productos inner join detallerPedido using(idProducto) where precio >=some (select precioUnidad*descuento from detallesPedido where descuento >= 25) order by idProducto;
+
+2. Presenta sólo aquellos productos cuyo precio por unidad fuese mayor que el de todos los productos vendidos con un descuento del 25 por ciento o mayor. Esto es mucho más restrictivo.
+
+select * from productos inner join detallerPedido using(idProducto) where precio >=all (select precioUnidad*descuento from detallesPedido where descuento >= 25) order by idProducto;
+
+3. Presenta todos los productos con descuento del 25 por ciento o mayor:
+
+select * from productos inner join detallesPedido using(idProducto) where descuento >= 25;
+
+4. Presenta los nombres de los empleados cuyos salarios son iguales o mayores que la media de los salarios de todos los empleados que tienen la misma categoría laboral.
+
+select * from empleados where salario >= all (select avg(salario) from empleados group by idEmpleado) group by cargo;
+
+5. Enumera el nombre y el contacto de todos los clientes que han solicitado un pedido en el segundo trimestre de 1995.
+
+select * from clientes inner join pedidos using(idCliente) where month(fechaPedido) >= 4 and month(fechaPedido) <= 6 and year(fechaPedido) = 1996;
+
+6. Lista los datos de todos los proveedores que nos surten la categoría de vinos y licores.
+
+select proveedores.* from proveedores inner join productos using(idProveedor) inner join categorías using(idProducto) where nombreCategoria like ‘vinos y licores’;
+
+7. Lista el nombre de los productos que fueron vendidos con un 20%.
+
+select * from productos inner join detallesPedido using(idProducto) where descuento >= 20;
+
+8. Presentar el nombre del empleado y sus ventas totales y su comisión (10% de sus ventas).
+
+select nombre, apellidos, count(idEmpleado) as ventas from empleados inner join pedidos using(idEmpleado);
+
+9. Presentar todos los pedidos que fueron enviados por la compañía DHL.
+
+select * from pedidos inner join compañiaenvios using(idCompañiaEnvios) where nombreCompañia like ‘DHL’;
+
+10. Presentar a aquellos clientes que no han realizado ningún pedido en los últimos tres meses.
+
+select * from clientes inner join pedidos using(idCliente) where period_diff(fechaPedido,curdate()) >= 3;
+
+11. Presentar un listado Nombre cliente, monto de los pedidos en el mes de Noviembre.
+
+select nombreContacto, count(idPedidos) from clientes inner join pedidos using(idCliente) where month(fechaPedido) = 11 group by idCliente;
+
+12. Presentar los nombre del producto y su existencia
+
+select nombreProducto, unidadesEnExistencia from productos;
+
+13. Presentar el número de productos vendidos por cada categoría.
+
+select nombreCategoria, count(idProducto) from categorías inner join productos using(idCategoria) group by idCategoria;
+
+14. Presentar el catálogo de productos ordenado alfabéticamente.
+
+select * from productos order by nombreProducto desc;
+
+15. Eliminar aquellos clientes que no han efectuado pedidos en los últimos 6 meses.
+
+select * from clientes inner join pedidos using(idCliente) where period_diff(fechaPedido,curdate()) >= 6;

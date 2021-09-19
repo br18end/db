@@ -1,0 +1,70 @@
+1. Presentar los datos de los alumnos ordenados descendientemente por nombre debe de incluirse el nombre de la carrera.
+
+select alumnos.*, carreras.*
+from alumnos inner join carreras using(idCarrera)
+order by nombre desc;
+
+2. Presenta el nombre del alumno y su talla de camiseta ordenado por talla.
+
+select nombre, Talla
+from alumnos inner join alumnocamiseta using(control)
+order by Talla, nombre;
+
+3. Se requiere hacer el pedido de las camisetas. ¿Cuántas camisetas de cada talla debemos pedir?
+
+select Talla, count(Talla) as Cantidad
+from alumnocamiseta
+group by Talla;
+
+4. Se requiere la lista de los alumnos que deben ir en el camión.
+
+select nombre
+from alumnos inner join(alumnoevento inner join transporte on
+alumnoevento.idTransporte=transporte.IdTransporte)using(control)
+where descripcion="camion"
+order by nombre;
+
+5. ¿Qué alumnos se fueron en carro?
+
+select nombre
+from alumnos inner join(alumnoevento inner join transporte on
+alumnoevento.idTransporte=transporte.IdTransporte)using(control)
+where descripcion="carro"
+order by nombre;
+
+6. ¿Qué alumnos son ponentes?
+
+select nombre, participacion
+from alumnos inner join alumnoevento using(control)
+where participacion="ponente"
+order by nombre;
+
+7. ¿Qué alumnos fueron el segundo día al congreso? y en que se fueron.
+
+select nombre, fechaDia, descripcion
+from alumnos inner join(alumnoevento inner join transporte on
+alumnoevento.idTransporte=transporte.IdTransporte)using(control)
+where day(fechaDia)="20"
+order by descripcion, nombre;
+
+8. Presenta el nombre de los alumnos, fecha de partida y fecha de regreso.
+
+select nombre, day(fechaDia) as partida, (day(fechaDia)+dias)-1 as regreso, dias
+from alumnos inner join alumnoevento using(control)
+order by nombre;
+
+9. Presenta el número de alumnos por medio de transporte.
+
+select descripcion, count(descripcion) as TotalAlumnos
+from alumnos inner join(alumnoevento inner join transporte on
+alumnoevento.idTransporte=transporte.IdTransporte)using(control)
+group by descripcion;
+
+10. Presenta el nombre de los alumnos y el nombre de la maestra responsable de
+cada grupo.
+
+select alumnos.nombre, maestro.nombre
+from alumnos inner join(alumnoevento inner join maestro on
+alumnoevento.idMaestro=maestro.noMaestro)
+using(control)
+order by maestro.nombre;

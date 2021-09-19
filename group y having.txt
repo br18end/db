@@ -1,0 +1,74 @@
+1.Lista los datos de todos los proveedores que nos surten la categoría de vinos y licores.
+
+select * from proveedores inner join productos using (idProveedor) inner join categorías using(idCategoria) where nombreCategoría like "vinos y licores";
+
+2.Lista el nombre de los productos que fueron vendidos con un 20%.
+
+select nombreProducto, descuento from productos inner join detallespedido using(idProducto) where descuento = 20;
+
+3.Presentar el nombre del empleado y sus ventas totales y su comisión (10% de sus ventas).
+
+select nombre, apellidos, count(idEmpleado) as ventas from empleados inner join pedidos using(idEmpleado);
+
+4.Presentar todos los pedidos que fueron enviados por la compañía DHL.
+
+select * from pedidos inner join compañiaenvios using(idCompañiaEnvios) where nombreCompañia like "DHL";
+
+5.Presentar a aquellos clientes que no han realizado ningún pedido en los últimos tres meses.
+
+select * from clientes inner join pedidos using(idCliente) where period_diff(fechaPedido,curdate()) >= 3;
+
+6.Presentar un listado Nombre cliente, monto de los pedidos en el mes de Noviembre.
+
+select nombreContacto, count(idPedidos) from clientes inner join pedidos using(idCliente) where month(fechaPedido) = 11 group by idCliente;
+
+7.Presentar los nombre del producto y su existencia
+
+select nombreProducto, unidadesEnExistencia from productos;
+
+8.Presentar el número de productos vendidos por cada categoría.
+
+select nombreCategoria, count(idProducto) from categorías inner join productos using(idCategoria) group by idCategoria;
+
+9.Presentar el catálogo de productos ordenado alfabéticamente.
+
+select * from productos order by nombreProducto desc;
+
+10.Eliminar aquellos clientes que no han efectuado pedidos en los últimos 6
+meses.
+
+select * from clientes inner join pedidos using(idCliente) where period_diff(fechaPedido,curdate()) >= 6;
+
+11.Insertar un nuevo proveedor.
+
+insert into proveedores values(12490431,"Google","Armando Perez","Supervisor","Av.Lazaro Cardenas","Mexicali",01,21100,"Baja California",5539109,null,null);
+
+12.Los productos de la categoría de abarrotes han aumentado su precio un 8%.
+
+update productos set precioUnidad=precioUnidad*.8 where categoria ="abarrotes";
+
+13.Presentar depto y el numero de empleados asignados a el
+
+select depto, count(emp) as "Numero de empleados" from empleadodeptopuesto
+group by depto;
+
+14.Presentar depto, nopuesto, y el numero de empleados en ese puesto y departamento
+
+select depto, noPuesto, count(noPuesto) as "Numero de empleados" from empleadodeptopuesto
+group by depto, noPuesto;
+
+15.Presentar el numero de mujeres y hombres(sexo,#)
+
+select sexo,count(sexo) as "Cantidad" from empleados
+group by sexo;
+
+16.Presentar el nombre y apellidos en una sola columna de todos los empleados que entraron a trabajar en el año 2014(subconsulta)
+
+select concat(nombre,' ',paterno,' ',materno) as "Nombre completo" from empleados
+where clave in(select emp from empleadodeptopuesto where year(fechaIngreso)="2014");
+
+17.Presentar todos los empleados que ganan mas de 5000(subconsulta)
+
+select concat(nombre,' ',paterno,' ',materno) as "Nombre completo" from empleados
+where clave in(select emp from empleadodeptopuesto
+where noPuesto in(select noPuesto from puestos where sueldo>5000));
